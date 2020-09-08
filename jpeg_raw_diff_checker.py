@@ -5,20 +5,21 @@ import shutil
 p = pathlib.Path('H:/100OLYMP_M1mk2')
 
 #.jpgと.orf(raw)のファイル名（拡張子付き）を取得する
-jpg_filename = list(map(lambda x: x.name, p.glob('*.jpg')))
-
-orf_filename = list(map(lambda x: x.name, p.glob('*.orf')))
+jpg_filename = [x.name for x in p.glob('*.jpg')]
+orf_filename = [x.name for x in p.glob('*.orf')]
 
 #.jpgと.orf(raw)のファイル名から拡張子を取り除く
-jpg_noext = list(map(lambda x: x.rstrip('.JPGjpg'), jpg_filename))
+jpg_noext = [x.rstrip('.JPGjpg') for x in jpg_filename]
+orf_noext = [x.rstrip('.ORForf') for x in orf_filename]
 
-orf_noext = list(map(lambda x: x.rstrip('.ORForf'), orf_filename))
+#jpgとorfのファイル名の集合(重複なし)をつくる
+set_filename = set(jpg_noext + orf_noext)
 
 #余分なファイルを探し、拡張子を付けて表示
-extra_jpg = list(map(lambda x: x + '.JPG', [i for i in jpg_noext if i not in orf_noext]))
+extra_jpg = [x + '.JPG' for x in set_filename - set(orf_noext)]
 print(extra_jpg)
 
-extra_orf = list(map(lambda x: x + '.ORF', [i for i in orf_noext if i not in jpg_noext]))
+extra_orf = [x + '.ORF' for x in set_filename - set(jpg_noext)]
 print(extra_orf)
 
 #余分なファイルが存在するとき
